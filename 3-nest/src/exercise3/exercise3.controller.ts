@@ -16,9 +16,9 @@ export class Exercise3Controller {
     return this.e3.loopsTriangle(parsedHeight);
   }
 
-  /*@Get('/loopsTriangle/:num')
-  primeNumber(@Param('height') num:number) {
-      var parsedHeight = parseInt(height);
-    return this.e3.loopsTriangle(parsedHeight);
-  }*/
+  @Get('/primeNumber/:primeNum')
+  primeNumber(@Param('primeNum') primeNum:number) {
+     var primeNum = primeNum;
+    return this.e3.primeNumber(primeNum);
+  }
 }
