@@ -21,4 +21,11 @@ export class Exercise3Controller {
      var primeNum = primeNum;
     return this.e3.primeNumber(primeNum);
   }
+
+  /*@Get('/sample')
+  test() {
+     this.e3.sampleFunction();
+    return;
+  }*/
+
 }

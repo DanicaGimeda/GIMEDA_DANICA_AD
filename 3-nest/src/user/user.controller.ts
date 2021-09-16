@@ -1,0 +1,78 @@
+import { Body, Controller, Delete, Get, Param, Patch, Post, Put } from '@nestjs/common';
+import { UserService } from './user.service';
+
+@Controller('user')
+export class UserController {
+
+    constructor(private readonly userService:UserService){
+
+    }
+
+    @Post('/register')
+    register(@Body() body:any ) {
+      console.log(body);
+      return this.userService.register(body);
+    
+    }
+
+    @Get('/all')
+    getAll(@Body() body:any){
+    return this.userService.getAll();
+    }
+
+    @Get(":id")
+    getId(@Param('id') id ){
+       return this.userService.getId(id);
+    }
+
+   
+    @Put("edit/:id")
+    editUser(@Param('id') id, @Body() body:any)
+    {
+        console.log("AAAAA");
+        if(id!=null && body!=null)
+            return this.userService.editUser(id,body);
+        else
+            return "No parameters added";
+    }
+
+    @Get("search/:term")
+    searchUser(@Param('term') term)
+    {
+        return this.userService.searchUser(term);
+    }
+
+
+   
+    @Patch("update/:id")
+    patchUser(@Param('id') id, @Body() body:any)
+    {
+        if(id!=null && body!=null)
+            return this.userService.patchUser(id,body);
+        else
+            return "No parameters added";
+    }
+
+    
+    @Delete("delete/:id")
+    deleteUser(@Param('id') id)
+    {
+        return this.userService.deleteUser(id);
+    }
+
+
+    @Post('/login')
+    logIn(@Body('password') password : string) {
+      
+      return this.userService.logIn(password);
+    
+    }
+
+
+
+
+
+
+
+   
+}

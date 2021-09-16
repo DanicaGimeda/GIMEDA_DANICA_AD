@@ -35,4 +35,17 @@ export class Exercise3Service {
   }
    return( "Is " + primeNum +' '+ "a Prime Number? "+ ' ' + isPrime(primeNum));;
     }
+
+    /*sampleFunction(){
+        var v1;
+        v1 = "NAME";
+        console.log(v1);
+        v1 = 1 ;
+        console.log(v1);
+        v1 = false;
+        console.log(v1);
+    }
+
+
+    */
 }
