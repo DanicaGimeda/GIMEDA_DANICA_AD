@@ -20,13 +20,13 @@ export class UserController {
     return this.userService.getAll();
     }
 
-    @Get(":id")
+    @Get("/:id")
     getId(@Param('id') id ){
        return this.userService.getId(id);
     }
 
    
-    @Put("edit/:id")
+    @Put("/:id")
     editUser(@Param('id') id, @Body() body:any)
     {
         console.log("AAAAA");
@@ -44,7 +44,7 @@ export class UserController {
 
 
    
-    @Patch("update/:id")
+    @Patch("/:id")
     patchUser(@Param('id') id, @Body() body:any)
     {
         if(id!=null && body!=null)
@@ -54,7 +54,7 @@ export class UserController {
     }
 
     
-    @Delete("delete/:id")
+    @Delete("/:id")
     deleteUser(@Param('id') id)
     {
         return this.userService.deleteUser(id);
