@@ -10,7 +10,7 @@ import { Helper } from './helper';
 export class UserService {
 
     private users : Map<string,User> = new Map<string,User>();
-    // private populatedData : User[] = [];
+    
     private populatedData : Map<string,User> = Helper.populate();
     
     constructor()
@@ -185,9 +185,9 @@ export class UserService {
             }
 
             var existingUser = this.getId(body.id).success;
-            var existingUserEmail = this.searchUser(body.email).success; //since success is true or false, pwede nato ma directly use in conditions
+            var existingUserEmail = this.searchUser(body.email).success; 
 
-            if (existingUser ) //hmmmmmm murag pwede man diay nato magamit ang "Success"
+            if (existingUser ) 
             {
                 return {
                     success: false,
@@ -208,10 +208,10 @@ export class UserService {
 
             updatedUser.password = null;
                 
-                //Gi gawas ra nako ang mga return gikan sa forEach kay idk why di mu return kung naa pas forEach
+                
 
             return {
-                success: true, //BOSHEEEEEEEEEEEEEEEEEEEEEEEETTTTTTTTTTTTTTTTTTTTTTTTTTTTTThahaha
+                success: true, 
                 data: {
                     id : updatedUser.id,
                     name : updatedUser.name,
@@ -255,7 +255,7 @@ export class UserService {
                 }
             });
                 
-        if(body.name != user.name && body.name != null  && !(body.name === "")) //pls ko sa mga returnsssnuuuuucharet
+        if(body.name != user.name && body.name != null  && !(body.name === "")) 
         {
         
             user.name = body.name;
@@ -302,7 +302,7 @@ export class UserService {
             }
 
 
-            if ( existingUserEmail && !(body.email != user.email) )//hahahahasaonani
+            if ( existingUserEmail && !(body.email != user.email) )
             {
                 return {
                     success: false,
@@ -310,7 +310,7 @@ export class UserService {
                 }
             }
         }
-// ehh if true sila duha dapat matawag ning naay console.log boshetwa tdo
+
 
 
         if(body.password != user.password && body.password != null  && !(body.password === "") )
@@ -333,7 +333,7 @@ export class UserService {
         if(hasChanged)
         {
             var updatedUser = new User(user.id, user.name, user.age, user.email, user.password);
-            this.populatedData.set(user.id, updatedUser); //.set() is the function atong Map2 thing ngokkkawo
+            this.populatedData.set(user.id, updatedUser); 
             return {
                 success: true,
                 data: {
@@ -348,7 +348,7 @@ export class UserService {
             data: "Nothing changed"
         };
         
-                    //u can feel da powerrr i donttttttt aaaaaaaaaaaaaaaaaaaaaaaaabubu oarinahuauehmwanganong1k mani wat
+                  
              
                 
 
@@ -450,7 +450,7 @@ export class UserService {
                 var user =  u;
 
 
-                //for some reason dili mu return tarong kung naa sud forEach, mupadayun jd sya sa pinakaubos na return
+                
                 if ((user.password == body.password ) && (user.email == body.email) )
                 {
                     authenticatedUser = u;
@@ -467,7 +467,7 @@ export class UserService {
                 data: "Sad nay error"
             } 
         }
-        if(authenticatedUser !=null) //if naay sud si authenticatedUser after sa forEach
+        if(authenticatedUser !=null) 
         {
             return{
                 success: true,
