@@ -19,14 +19,14 @@ export class User
       throw new Error('Method not implemented.');
   }
     
-  private id : string;
-  private name : string;
-  private age : number;
-  private email : string;
+  public id : string;
+  public name : string;
+  public age : number;
+  public email : string;
   public password : string;
     User: any;
 
-  constructor(id : string, name:string, age : number, email:string, password : string) {
+  constructor(id : string , name:string, age : number, email:string, password : string) {
     this.id = id ;
     this.name = name ;
     this.age = age ;

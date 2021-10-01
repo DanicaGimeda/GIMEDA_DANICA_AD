@@ -3,17 +3,27 @@ import e from 'express';
 import { InformationEvent } from 'http';
 import { User } from './user.module';
 import { v4 as uuidv4 } from 'uuid';
+import { Helper } from './helper';
+
 
 @Injectable()
 export class UserService {
 
-    private users : Map<number,User> = new Map<number,User>();
-    private populatedData : User[] = [];
+    private users : Map<string,User> = new Map<string,User>();
+    // private populatedData : User[] = [];
+    private populatedData : Map<string,User> = Helper.populate();
     
+    constructor()
+    {
+        console.log("shets");
 
+        this.users = Helper.populate();
+        console.log(this.users);
+    }
      register(body:any){
         var unDefined;
-        
+        var user = null;
+        var id = uuidv4();
         try{
         
             
@@ -21,52 +31,69 @@ export class UserService {
                 body.age == unDefined || body.email == unDefined ||
                body.password == unDefined )
             {
-                return "Attribute missing!"
+                return {
+                    success: false,
+                    data: "Attribute missing!"
+                }
             }
 
             if ( typeof body.name != typeof "okay" ||
                 typeof body.age != typeof 23 || typeof body.email != typeof "op" ||
                 typeof body.password != typeof "tasukete" )
             {
-                return "Attribute has a wrong type!" 
+                return {
+                    success: false,
+                    data: "Attribute has a wrong type!" 
+                } 
             }
 
             var existingUser = this.getId(body.id);
             var existingUserEmail = this.searchUser(body.email);
 
-            if (typeof existingUser != typeof ""  )
+            if (typeof existingUser.data != typeof ""  )
             {
-                return "Attribute key is invalid"
+                return {
+                    success: false,
+                    data: "Attribute key is invalid"
+                } 
             }
 
-            if (typeof existingUserEmail != typeof "")
+            if (typeof existingUserEmail.data != typeof "")
             {
-                return "Email already exist in database!"
+                return{
+                    success: false,
+                    data: "Email already exist in database!"
+                } 
             }
         
             
-            var user = new User(uuidv4() , body.name, body.age, body.email, body.password);
-            this.populatedData.push(user);
+            user = new User(id , body.name, body.age, body.email, body.password);
+            this.populatedData.set(id, user);
             
         } catch(e)
 
         {
             console.log(e);
-            return false;
+            return {
+                success: false,
+                data : "Sads nay error"
+            };
         }
 
         
-        return true;
+        return {
+            success: true,
+            data: user
+        };
         
     } 
 
     getAll(){
-        console.log(this.populatedData);
+
         var userList = [];
-        for ( var i = 0; i < this.populatedData.length ; i++ )
+        this.populatedData.forEach((u)=>
         {
-            console.log( this.populatedData[i] instanceof User)
-            var user = this.populatedData[i].get();
+            var user = u;
             var bodyx = 
             {
                 id : user.id,
@@ -76,85 +103,135 @@ export class UserService {
             }
 
             userList.push(bodyx);
-        }
-       return userList;
+        })
+
+       return {
+           success: true,
+           data: userList
+       }
     }
 
      getId(id :any){
-    console.log(id);
-        
-        for ( var i = 0; i < this.populatedData.length ; i++ )
+        var data = null;
+
+
+        this.populatedData.forEach((u)=>
         {
-            var user = this.populatedData[i].get();
+            var user = u;
 
             if (user.id == id )
             {
-                return             {
+                var ux = {
                     id : user.id,
                     name : user.name,
                     age : user.age,
                     email : user.email
                 };
-            }
+                data = null;
 
-            
-        }
+                data ={
+                    success: true,
+                    data: ux
+                };
+                console.log(data);
+
+            }
+        })
+
+        if(!data)
+            return {
+                success: false,
+                data: "ID does not match any users in databasesss"
+            }
+                
+
         
-       return "ID does not match any users in database";
+       return data;
     }
 
     editUser(id:any, body:any)
     {
         var unDefined;
+        var user = null;
         try{
-            for ( var i = 0; i < this.populatedData.length ; i++ )
+            this.populatedData.forEach((u)=>
             {
-                var user = this.populatedData[i].get();
-                if (user.id == id )
+                if (u.id == id )
                 {
+                    user = u;
+                }
+            });
                     
 
-                    if (  body.name == unDefined ||
-                        body.age == unDefined || body.email == unDefined ||
-                       body.password == unDefined )
-                    {
-                        return "Attribute missing!"
-                    }
-        
-                    if (  typeof body.name != typeof "okay" ||
-                        typeof body.age != typeof 23 || typeof body.email != typeof "op" ||
-                        typeof body.password != typeof "tasukete" )
-                    {
-                        return "Attribute has a wrong type!" 
-                    }
-        
-                    var existingUser = this.getId(body.id);
-                    var existingUserEmail = this.searchUser(body.email);
-        
-                    if (typeof existingUser != typeof ""  )
-                    {
-                        return "Attribute key is invalid"
-                    }
-        
-                    if (typeof existingUserEmail != typeof "")
-                    {
-                        return "Email already exist in database!"
-                    }
+            if (  body.name == unDefined ||
+                body.age == unDefined || body.email == unDefined ||
+                body.password == unDefined )
+            {
+                return{
+                    success: false,
+                    data: "Attribute missing!"
+                } 
+            }
 
-                    var updatedUser = new User(user.id, body.name, body.age, body.email, body.password);
-                    this.populatedData[i] = updatedUser;
-                    return true;
-                
+            if (  typeof body.name != typeof "okay" ||
+                typeof body.age != typeof 23 || typeof body.email != typeof "op" ||
+                typeof body.password != typeof "tasukete" )
+            {
+                return {
+                    success: false,
+                    data: "Attribute has a wrong type!"
                 }
+                    
+            }
+
+            var existingUser = this.getId(body.id).success;
+            var existingUserEmail = this.searchUser(body.email).success; //since success is true or false, pwede nato ma directly use in conditions
+
+            if (existingUser ) //hmmmmmm murag pwede man diay nato magamit ang "Success"
+            {
+                return {
+                    success: false,
+                    data: "Attribute key is invalid"
+                }
+            }
+
+            if (existingUserEmail)
+            {
+                return {
+                    success: false,
+                    data: "Email already exist in database!"
+                }
+            }
+
+            var updatedUser = new User(user.id, body.name, body.age, body.email, body.password);
+            this.populatedData.set(user.id,updatedUser);
+
+            updatedUser.password = null;
                 
+                //Gi gawas ra nako ang mga return gikan sa forEach kay idk why di mu return kung naa pas forEach
+
+            return {
+                success: true, //BOSHEEEEEEEEEEEEEEEEEEEEEEEETTTTTTTTTTTTTTTTTTTTTTTTTTTTTThahaha
+                data: {
+                    id : updatedUser.id,
+                    name : updatedUser.name,
+                    age: updatedUser.age,
+                    email : updatedUser.email
+                }
             }
 
         }catch(e)
         {
-            return false;
+            return {
+                success: false,
+                data: "grrrr"
+            }
         }
 
-        return false;
+       return {
+           success: false,
+           data: "ok"
+       }
     }
 
     patchUser(id:any, body:any)
@@ -164,94 +241,126 @@ export class UserService {
         
         try{
             var existingUserEmail = null
+            var user = null;
             if ( body.email != null )
             {
-                 existingUserEmail = this.searchUser(body.email);
+                 existingUserEmail = this.searchUser(body.email).success;
             }
 
-            for ( var i = 0; i < this.populatedData.length ; i++ )
+            this.populatedData.forEach((u) =>
             {
-                var user = this.populatedData[i].get();
-                if (user.id == id )
+                if (u.id == id )
                 {
-                    if(body.name != user.name && body.name != null  && !(body.name === ""))
-                    {
-                    
-                        user.name = body.name;
-                        hasChanged = true;
-                        if ( typeof body.name != typeof "ok"  )
-                        {
-                            return "Attribute has a wrong type!" 
-                        }
-            
-                    }
-                       
-                    if(body.age != user.age && body.age != null  && !(body.age === ""))
-                    {
-                        user.age =body.age;
-                        hasChanged = true;
-                        if ( typeof body.age != typeof 23  )
-                        {
-                            return "Attribute has a wrong type!" 
-                        }
-
-                    }
-
-                    if(existingUserEmail != null)
-                    {
-                        if(body.email!=user.email && body.email != null  && !(body.email === "") )
-                        {
-                            user.email = body.email;
-                            hasChanged = true;
-                            if ( typeof body.email != typeof "ok"  )
-                            {
-                                return "Attribute has a wrong type!" 
-                            }
-                            
-                            
-                        }else if (typeof existingUserEmail != typeof "" && body.email != user.email )
-                        {
-                            return "Email already exist in database!"
-                        }
-                    }
-
-
-
-                    if(body.password != user.password && body.password != null  && !(body.password === "") )
-                    {
-
-                        user.password = body.password;
-                        hasChanged = true;
-                        if ( typeof body.password != typeof "ok"  )
-                        {
-                            return "Attribute has a wrong type!" 
-                        }
-                        
-                    }
-
-                    
-
-                    if(hasChanged)
-                    {
-                        var updatedUser = new User(user.id, user.name, user.age, user.email, user.password);
-                        this.populatedData[i] = updatedUser;
-                        return true;
-                    }
-                    else return "Nothing changed";
-                    
-                    
+                    user = u;
                 }
-             
+            });
+                
+        if(body.name != user.name && body.name != null  && !(body.name === "")) //pls ko sa mga returnsssnuuuuucharet
+        {
+        
+            user.name = body.name;
+            hasChanged = true;
+            if ( typeof body.name != typeof "ok"  )
+            {
+                return {
+                    success: false,
+                    data: "Attribute has a wrong type!" 
+                }
+            }
+
+        }
+            
+        if(body.age != user.age && body.age != null  && !(body.age === ""))
+        {
+            user.age =body.age;
+            hasChanged = true;
+            if ( typeof body.age != typeof 23  )
+            {
+                return { 
+                    success: false,
+                    data: "Attribute has a wrong type!" }
+            }
+
+        }
+
+        if(existingUserEmail != null)
+        {
+
+            if(body.email!=user.email && body.email != null  && !(body.email === "") )
+            {
+                user.email = body.email;
+                hasChanged = true;
+                if ( typeof body.email != typeof "ok"  )
+                {
+                    return {
+                        success: false,
+                        data: "Attribute has a wrong type!" 
+                    }
+                }
+                
                 
             }
 
-        }catch(e)
+
+            if ( existingUserEmail && !(body.email != user.email) )//hahahahasaonani
+            {
+                return {
+                    success: false,
+                    data: "Email already exist in database!"
+                }
+            }
+        }
+// ehh if true sila duha dapat matawag ning naay console.log boshetwa tdo
+
+
+        if(body.password != user.password && body.password != null  && !(body.password === "") )
         {
-            console.log(e);
-            return false;
+
+            user.password = body.password;
+            hasChanged = true;
+            if ( typeof body.password != typeof "ok"  )
+            {
+                return {
+                    success: false,
+                    data: "Attribute has a wrong type!"
+                }
+            }
+            
         }
 
-        return "ID does not match any users in database";
+        
+
+        if(hasChanged)
+        {
+            var updatedUser = new User(user.id, user.name, user.age, user.email, user.password);
+            this.populatedData.set(user.id, updatedUser); //.set() is the function atong Map2 thing ngokkkawo
+            return {
+                success: true,
+                data: {
+                    id: updatedUser.id,
+                    name: updatedUser.name,
+                    email: updatedUser.email,
+                }
+            };
+        }
+        else return {
+            success: false,
+            data: "Nothing changed"
+        };
+        
+                    //u can feel da powerrr i donttttttt aaaaaaaaaaaaaaaaaaaaaaaaabubu oarinahuauehmwanganong1k mani wat
+             
+                
+
+        }catch(e)
+        {
+            return {
+            success : false,
+            data: "nothing sad"
+        };
+        }
+
+       
     }
 
     searchUser(term : any)
@@ -260,9 +369,9 @@ export class UserService {
         if(this.populatedData == null)
             return null;
 
-        for ( var i = 0; i < this.populatedData.length ; i++ )
+        this.populatedData.forEach((u) =>
         {
-            var user = this.populatedData[i].get();
+            var user = u;
                
             if (user.id == term || user.name.toUpperCase() == term.toUpperCase() || user.email.toUpperCase() == term.toUpperCase() || user.age == term )
             {
@@ -277,59 +386,101 @@ export class UserService {
 
             }
     
-        }   
+        } )
         if ( array.length > 0 )
-               return array;
+               return{
+                    success : true,
+                    data: array
+               } ;
 
-        return "Term does not match any users in database";
+        return {
+            success:false,
+            data: "Term does not match any users in database"
+        }
     }
 
     deleteUser(id :any)
     {
         try{
-            for ( var i = 0; i < this.populatedData.length ; i++ )
+            var user = null;
+            this.populatedData.forEach((u)=>
             {
-                var user = this.populatedData[i].get();
+                user = u;
+            })
+
+            if(user)
+            {
                 if (user.id == id )
                 {
-                    this.populatedData.splice(i,1);
-                    return "Successfully Deleted! ^^";
+                    this.populatedData.delete(user.id);
+                    return {
+                        success: true,
+                        data: "Successfully Deleted! ^^"
+                    };
                 }
                 
             }
 
+
         }catch(e)
         {
-            return "Error : Deletion is a failure";
+            return {
+                success: false,
+                data: "Error : Deletion is a failure"
+            };
         }
 
-        return "Error : cannot find user ID";
+        return {
+            success: false,
+            data: "Error : cannot find user ID"
+        };
     }
 
     logIn( body:any )
     {
         try{
-            
-            for ( var i = 0; i < this.populatedData.length ; i++ )
+            var authenticatedUser = null;
+            if(!body)
+            return {
+                success: false,
+                data: "No parameters"
+            };
+            this.populatedData.forEach((u) =>
             {
-                var user = this.populatedData[i].get();
+                var user =  u;
 
-                if(!body)
-                return null;
 
+                //for some reason dili mu return tarong kung naa sud forEach, mupadayun jd sya sa pinakaubos na return
                 if ((user.password == body.password ) && (user.email == body.email) )
                 {
-                    return "Success!";
+                    authenticatedUser = u;
                 }
                 
-            }
+            });
+
+
 
         }catch(e)
         {
-            return "Email or Password is incorrect";
+            return {
+                success: false,
+                data: "Sad nay error"
+            } 
+        }
+        if(authenticatedUser !=null) //if naay sud si authenticatedUser after sa forEach
+        {
+            return{
+                success: true,
+                data : authenticatedUser
+            } 
+        }
+        else{
+            return{
+                success: false,
+                data: "Email or Password is incorrect"
+            } 
         }
 
-        return "Email or Password is incorrect";
     }
 
 
