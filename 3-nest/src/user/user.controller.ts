@@ -12,6 +12,12 @@ export class UserController {
     register(@Body() body:any ) {
       console.log(body);
       return this.userService.register(body);
+
+            /*fails if .has attributes of the wrong type
+        is missing an attribute
+        has an invalid attribute key
+        Email already exists in database 
+        */
     
     }
 
@@ -29,7 +35,7 @@ export class UserController {
     @Put("/:id")
     editUser(@Param('id') id, @Body() body:any)
     {
-        console.log("AAAAA");
+
         if(id!=null && body!=null)
             return this.userService.editUser(id,body);
         else
@@ -62,9 +68,9 @@ export class UserController {
 
 
     @Post('/login')
-    logIn(@Body('password') password : string) {
+    logIn(@Body() body : any ) {
       
-      return this.userService.logIn(password);
+      return this.userService.logIn(body);
     
     }
 
