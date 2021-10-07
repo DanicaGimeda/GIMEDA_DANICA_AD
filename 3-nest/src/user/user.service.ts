@@ -4,18 +4,19 @@ import { InformationEvent } from 'http';
 import { User } from './user.module';
 import { v4 as uuidv4 } from 'uuid';
 import { Helper } from './helper';
-
+import * as admin from 'firebase-admin';
+const DEBUG: boolean = true;
 
 @Injectable()
 export class UserService {
 
     private users : Map<string,User> = new Map<string,User>();
-    
+    private DB = admin.firestore();
     private populatedData : Map<string,User> = Helper.populate();
     
     constructor()
     {
-        console.log("shets");
+        
 
         this.users = Helper.populate();
         console.log(this.users);
@@ -68,6 +69,7 @@ export class UserService {
         
             
             user = new User(id , body.name, body.age, body.email, body.password);
+            this.saveToDb(user);
             this.populatedData.set(id, user);
             
         } catch(e)
@@ -481,6 +483,18 @@ export class UserService {
             } 
         }
 
+    }
+
+    saveToDb(user: User): boolean {
+        try {
+            var apple = this.DB.collection("users").doc(user.id).set(user.toJson());
+            console.log(apple);
+            this.users.set(user.id, user);
+            return this.users.has(user.id);
+        }catch (error) {
+            console.log(error);
+            return false;
+        }
     }
 
 
