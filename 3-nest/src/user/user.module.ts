@@ -17,7 +17,8 @@ export class User
         id: this.id,
         name:this.name,
         age: this.age,
-        email: this.email
+        email: this.email,
+        password: this.password
       }
     }
     static values() {
