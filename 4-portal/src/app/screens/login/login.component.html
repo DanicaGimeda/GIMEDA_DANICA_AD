@@ -1,0 +1,24 @@
+<h2>Login Page</h2><br>    
+    <div class="login">    
+    <form id="login" method="get" action="login.php">    
+        <label><b>Email<br>    
+        </b>    
+        </label>    
+        <input type="text" name="Uname" id="Uname" placeholder="Email" #email/>    
+        <br><br>    
+        <label><b>Password     
+        </b>    
+        </label>    
+        <input type="Password" name="Pass" id="Pass" placeholder="Password" #password />    
+        <br><br>    
+        <input (click)="logIn(email.value,password.value)" type="button" name="log" id="log" value="Log In Here">       
+        <br><br>    
+        
+        <input type="checkbox" id="check">   
+         
+        <span>Remember me</span>    
+        <br><br>    
+        
+        
+    </form>     
+</div>    
