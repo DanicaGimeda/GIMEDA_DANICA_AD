@@ -26,7 +26,7 @@ export class UserService {
         var user = null;
         var id = uuidv4();
         try{
-        
+             console.log(body);
             
             if (  body.name == unDefined ||
                 body.age == unDefined || body.email == unDefined ||
@@ -505,7 +505,7 @@ export class UserService {
         else{
             return{
                 success: false,
-                data: "Email or Password is incorrect"
+                data: "Does not exist in database"
             } 
         }
 

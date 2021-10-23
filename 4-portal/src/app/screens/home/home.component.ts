@@ -1,4 +1,7 @@
+import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-home',
@@ -6,10 +9,25 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./home.component.scss']
 })
 export class HomeComponent implements OnInit {
+  requestResult: any;
 
-  constructor() { }
+  constructor(private router: Router, private api: HttpClient) { }
 
+  
   ngOnInit(): void {
   }
-
+ 
+  async display() {
+    var result:any =await this.api.get(environment.API_URL + "/user/all").toPromise();
+    
+    
+       this.requestResult = result.data
+      
+    
+    
+  
+    console.log(result.success);
+    // this.requestResult = result.data;
+ 
+}
 }

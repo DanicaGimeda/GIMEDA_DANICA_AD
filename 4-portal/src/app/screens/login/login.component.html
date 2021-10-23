@@ -4,16 +4,18 @@
         <label><b>Email<br>    
         </b>    
         </label>    
-        <input type="text" name="Uname" id="Uname" placeholder="Email" #email/>    
+        <input type="text" name="Uname" id="Uname" placeholder="Email" [formControl]="fCEmail"/>    
         <br><br>    
         <label><b>Password     
         </b>    
         </label>    
-        <input type="Password" name="Pass" id="Pass" placeholder="Password" #password />    
+        <input type="Password" name="Pass" id="Pass" placeholder="Password" [formControl]="fCPassword" />    
         <br><br>    
-        <input (click)="logIn(email.value,password.value)" type="button" name="log" id="log" value="Log In Here">       
+        <input type="button1" (click)="nav('register')" name="reg" id="reg" value="Register">
+        <br><br>
+        <input type="button" (click)="login()" name="log" id="log" value="Log In Here">       
         <br><br>    
-        
+        <p>{{requestResult | json}}</p>
         <input type="checkbox" id="check">   
          
         <span>Remember me</span>    

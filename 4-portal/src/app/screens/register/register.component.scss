@@ -1,4 +1,4 @@
-.login{  
+.register{  
     width: 382px;  
     overflow: hidden;  
     margin: auto;  
@@ -31,21 +31,14 @@ label{
 color: #ffffff;  
 font-size: 17px;  
 }  
-#Uname{  
+#name, #Age1, #email1, #pass, #pass2{  
 width: 300px;  
 height: 30px;  
 border: none;  
 border-radius: 17px;  
 padding-left: 7px;  
 }  
-#Pass{  
-width: 300px;  
-height: 30px;  
-border: none;  
-border-radius: 17px;  
-padding-left: 7px;  
-  
-}  
+
 #log{  
 width: 200px;  
 height: 30px;  
@@ -55,7 +48,7 @@ padding-left: 7px;
 color: rgb(2, 70, 75);  
 }  
 
-#reg{  
+#createAcc, #back{  
     width: 200px;  
     height: 30px;  
     border: none;  
