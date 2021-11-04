@@ -10,5 +10,44 @@ body
     background-attachment: fixed;
     background-position: center;
     font-family: 'Arial'; 
+}
+
+button,#createAcc, #back, #reg, #log, .button1{  
+    margin: auto;
+    text-align: center;  
+    color: #ffffff;  
+    padding-block-start: 5px;
+    background-image: linear-gradient(rgb(32, 95, 110), rgba(97, 192, 221, 0.671)) ; 
+    border-radius: 10px ;
+    display: inline;
+    height:70%;
+}  
+
+label{  
+    color: #ffffff;  
+    font-size: 17px;  
+}  
+
+#name, #Age1, #email1, #pass, #pass2{  
+    width: 300px;  
+    height: 30px;  
+    border: none;  
+    border-radius: 17px;  
+    padding-left: 7px;  
+    color: rgb(78, 61, 61); 
+}
+
+button:hover {
+    background-color:darkslategrey;
+}
+
+span{  
+    color: white;  
+    font-size: 17px;  
+}  
+
+a{  
+    float: right;  
+    background-color: grey;  
 }  
 

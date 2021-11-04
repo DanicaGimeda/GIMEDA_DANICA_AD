@@ -10,7 +10,6 @@ import { LoginComponent } from './screens/login/login.component';
 import { RegisterComponent } from './screens/register/register.component';
 
 
-
 @NgModule({
   declarations: [
     AppComponent,
@@ -22,7 +21,8 @@ import { RegisterComponent } from './screens/register/register.component';
     HttpClientModule,
     BrowserModule,
     AppRoutingModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+   
   ],
   providers: [],
   bootstrap: [AppComponent]

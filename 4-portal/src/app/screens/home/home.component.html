@@ -1,28 +1,70 @@
 <div class="container">
-  <button (click)="display()"><h2>CLICK TO VIEW LIST</h2></button>
+  
+  <button (click)="nav('login')" style="margin-left:30vw;"><h3>HOME</h3></button>
+  <button (click)="nav('register')" style="margin-right:50vw;"><h3>REGISTER</h3></button>
+  <div id="buttons">
+    <button (click)="search()"><h3>CLICK TO SEARCH</h3></button>
+    
+    <input type="text" id="search-bar" placeholder="Search" [formControl]="fCSearch">
+    
+    <button (click)="display()"><h3>CLICK TO VIEW LIST</h3></button>
+  </div>
     <table class="table table-striped" >
       <thead>
           <tr>
-            <th>User ID</th>
+            
             <th>User Name</th>
             <th>User Age</th>
             <th>User Email</th>
+            <th>Delete User</th>
+            <th>Edit User</th>
           </tr>
       </thead>
       <br>
       <br>
       <tbody>
+        <tr >
+          <td><input type="text" name="Name" id="Name"  placeholder ="{{name}}" value='{{name}}' [formControl]="fCName" /> </td>
+          <td><input type="number" name="Age" id="Age"   placeholder ="{{age}}" value='{{age}}' [formControl]="fCAge" /> </td>
+          <td><input type="text" name="Email" id="Email"  placeholder ="{{email}}"value='{{email}}'  [formControl]="fCEmail" /> </td>
+          <td style = "text-align: center;">
+            <div id="btnwrap">
+            <button id="Update" (click)="editUser(id)">
+              Update
+            </button>
+          </div></td>
+        </tr>
         <tr *ngFor="let result of requestResult">
-          <td>{{ result.id }}</td>
           
           <td>{{ result.name }}</td>
-          
           <td>{{ result.age }}</td>
           <td>{{ result.email }}</td>
+          <td style = "text-align: center;">
+            <div id="btnwrap">
+            <button id="delete" (click)="delete(result.id)">
+              delete
+            </button>
+          </div>
+          </td>
+          <td style = "text-align: center;">
+            <div id="btnwrap">
+            <button id="edit" (click)="edit(result.id)">
+              Edit
+            </button>
+          </div>
+          </td>
+          
           <br><br>
         </tr>
       </tbody>
     </table>
+ 
   </div>
+
+   
+      
+   
+        
+        
 
       
